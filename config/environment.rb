@@ -6,6 +6,20 @@ Dir[File.join(File.dirname(__FILE__), "../lib/support", "*.rb")].each {|f| requi
 
 ENV["SCHOOL_ENV"] ||= "development"
 
+ActiveRecord::Base.establish_connection(
+  :adapter => "sqlite3",
+  :database => "db/students.sqlite"
+)
+
+sql = <<-SQL
+  CREATE TABLE IF NOT EXISTS students (
+  id INTEGER PRIMARY KEY,
+  name TEXT
+  )
+SQL
+ 
+ActiveRecord::Base.connection.execute(sql)
+
 DBRegistry[ENV["SCHOOL_ENV"]].connect!
 DB = ActiveRecord::Base.connection
 
